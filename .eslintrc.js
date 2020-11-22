@@ -1,45 +1,8 @@
 module.exports = {
   root: true,
-  parser: 'babel-eslint',
-  globals: {
-    __DEV__: true,
-  },
-  env: {
-    jest: true,
-    es6: true,
-    node: true,
-    browser: true,
-  },
-  extends: [
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'plugin:flowtype/recommended',
-    'prettier/flowtype',
-    'prettier/react',
-    'plugin:react-native/all',
-  ],
-  plugins: ['babel', 'react', 'react-native', 'flowtype', 'prettier'],
+  extends: ['@react-native-community'],
   rules: {
-    curly: 'error',
-    'flowtype/no-types-missing-file-annotation': 'off',
-    'no-console': 1,
-    'no-extra-semi': 'error',
-    'array-bracket-spacing': ['error', 'never'],
-    'react/display-name': 0,
-    'react/prop-types': 0,
-    'react/sort-comp': [0],
-    'react-native/split-platform-components': 0,
-    'flowtype/semi': ['error', 'never'],
-    'flowtype/space-after-type-colon': ['error', 'always'],
-    'flowtype/space-before-type-colon': ['error', 'never'],
-    'flowtype/generic-spacing': ['error', 'never'],
-    'flowtype/no-primitive-constructor-types': 2,
-    'flowtype/no-dupe-keys': 2,
-    'prettier/prettier': 'error',
-  },
-  settings: {
-    flowtype: {
-      onlyFilesWithFlowAnnotation: false,
-    },
+    semi: ['error', 'never'],
+    'jsx-quotes': ['error', 'prefer-single'],
   },
 }
