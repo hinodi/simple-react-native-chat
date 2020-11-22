@@ -12,6 +12,7 @@ class Fire {
 
   init = () => firebase.initializeApp(firebaseConfig)
 
+  // auth
   signIn = async (email, password) => {
     try {
       await firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -27,7 +28,6 @@ class Fire {
   signInWithEmailAndPassword = async (email, password) => {
     try {
       await firebase.auth().signInWithEmailAndPassword(email, password)
-      console.log('hinodi user', this.currentUser)
       this.saveUser(this.currentUser.email, this.currentUser.uid)
       return
     } catch (err) {
@@ -42,40 +42,38 @@ class Fire {
     return firebase.auth().currentUser
   }
 
-  //
-  get userDocument() {
-    return firebase.firestore().collection('chat').doc('user')
+  // user
+  get userCollection() {
+    return firebase.firestore().collection('users')
   }
 
   saveUser = (email, uid) => {
-    this.userDocument.set({ email, uid })
+    this.userCollection.doc(uid).set({ email, uid })
   }
 
   getListUsers = async () => {
     try {
-      const doc = await this.userDocument.get()
-      console.log('hinodi ------- 01', doc.data())
+      const querySnapshot = await this.userCollection.get()
+      const listUsers = querySnapshot.docs.map((doc) => doc.data())
+      return listUsers
     } catch (err) {
-      console.log('get list users failed', err)
+      return []
     }
   }
 
-  //
+  // chat
+  getMessageRef(uid1) {
+    const uid2 = this.currentUser.uid
+    let refName = `messages_${uid1}_${uid2}`
 
-  get ref() {
-    return firebase.database().ref(`messages_${this.currentUser.uid}`)
-  }
+    if (uid2.localeCompare(uid1) > 0) {
+      refName = `messages_${uid2}_${uid1}`
+    }
 
-  get users() {
-    return firebase
-      .firestore()
-      .collection('user')
-      .doc('OfBAVYoIrWkjWl5w5W5G')
-      .get()
+    return firebase.database().ref(refName)
   }
 
   parse = (snapshot) => {
-    console.log('hinodi snapshot', snapshot.val())
     const { timestamp: numberStamp, text, user } = snapshot.val()
     const { key: _id } = snapshot
     const timestamp = new Date(numberStamp)
@@ -88,8 +86,8 @@ class Fire {
     return message
   }
 
-  on = (callback) =>
-    this.ref
+  on = (uid, callback) =>
+    this.getMessageRef(uid)
       .limitToLast(20)
       .on('child_added', (snapshot) => callback(this.parse(snapshot)))
 
@@ -97,7 +95,7 @@ class Fire {
     return firebase.database.ServerValue.TIMESTAMP
   }
   // send the message to the Backend
-  send = (messages) => {
+  send = (uid, messages) => {
     for (let i = 0; i < messages.length; i++) {
       const { text, user } = messages[i]
       const message = {
@@ -105,15 +103,15 @@ class Fire {
         user,
         timestamp: this.timestamp,
       }
-      this.append(message)
+      this.append(uid, message)
     }
   }
 
-  append = (message) => this.ref.push(message)
+  append = (uid, message) => this.getMessageRef(uid).push(message)
 
   // close the connection to the Backend
-  off() {
-    this.ref.off()
+  off(uid) {
+    this.getMessageRef(uid).off()
   }
 }
 

@@ -16,7 +16,7 @@ class Loading extends React.Component {
 
   _observeAuth = (user) => {
     if (user) {
-      return this.props.navigation.replace(AppRoutes.Main)
+      return this.props.navigation.replace(AppRoutes.MainStack)
     }
     this.props.navigation.replace(AppRoutes.Auth)
   }
