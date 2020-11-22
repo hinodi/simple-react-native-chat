@@ -6,7 +6,7 @@ import colors from '../config/colors'
 import Conversation from '../components/Conversation'
 import { MainRoutes } from './constants'
 
-class Main extends React.Component {
+class Contact extends React.Component {
   state = {
     listUsers: [],
   }
@@ -38,7 +38,7 @@ class Main extends React.Component {
   }
 }
 
-export default Main
+export default Contact
 
 const styles = StyleSheet.create({
   container: {

@@ -9,7 +9,7 @@ import colors from '../config/colors'
 import Loading from './Loading'
 import Auth from './Auth'
 import { AppRoutes, MainRoutes, HomeRoutes } from './constants'
-import Main from './Main'
+import Contact from './Contact'
 import Chat from './Chat'
 import Setting from './Setting'
 
@@ -20,7 +20,7 @@ class HomeTab extends React.Component {
   render() {
     return (
       <Tab.Navigator>
-        <Tab.Screen name={HomeRoutes.Main} component={Main} />
+        <Tab.Screen name={HomeRoutes.Contact} component={Contact} />
         <Tab.Screen name={HomeRoutes.Setting} component={Setting} />
       </Tab.Navigator>
     )

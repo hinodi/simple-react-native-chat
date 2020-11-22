@@ -11,5 +11,6 @@ export const MainRoutes = {
 
 export const HomeRoutes = {
   Main: 'Main',
+  Contact: 'Contact',
   Setting: 'Setting',
 }
