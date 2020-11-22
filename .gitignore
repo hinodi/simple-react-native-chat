@@ -60,4 +60,4 @@ buck-out/
 
 
 # secret
-secret.*
+GoogleService-Info.plist

@@ -14,15 +14,11 @@ class Loading extends React.Component {
     )
   }
 
-  _observeAuth = (user) => {
-    if (user) {
+  componentDidMount() {
+    if (Firebase.currentUser) {
       return this.props.navigation.replace(AppRoutes.MainStack)
     }
     this.props.navigation.replace(AppRoutes.Auth)
-  }
-
-  componentDidMount() {
-    Firebase.observeAuth(this._observeAuth)
   }
 }
 
