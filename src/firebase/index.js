@@ -1,12 +1,13 @@
 import { GoogleSignin } from '@react-native-community/google-signin'
 import auth from '@react-native-firebase/auth'
+import firestore from '@react-native-firebase/firestore'
 
 class Fire {
   // static ErrorCode = {
   //   EmailUsed: 'auth/email-already-in-use',
   // }
 
-  // // auth
+  // auth
   // signIn = async (email, password) => {
   //   try {
   //     await firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -35,7 +36,9 @@ class Fire {
       const { idToken } = await GoogleSignin.signIn()
       const googleCredential = auth.GoogleAuthProvider.credential(idToken)
 
-      return await auth().signInWithCredential(googleCredential)
+      const res = await auth().signInWithCredential(googleCredential)
+      const { uid, email, displayName: name } = res?.user ?? {}
+      this.saveUser({ uid, email, name })
     } catch (error) {
       throw new Error(error.message)
     }
@@ -54,26 +57,38 @@ class Fire {
     return auth().currentUser
   }
 
-  // // user
-  // get userCollection() {
-  //   return firebase.firestore().collection('users')
-  // }
+  // user
+  get userCollection() {
+    return firestore().collection('users')
+  }
 
-  // saveUser = (email, uid) => {
-  //   this.userCollection.doc(uid).set({ email, uid })
-  // }
+  saveUser = ({ uid, email, name }) => {
+    this.userCollection.doc(uid).set({ uid, email, name })
+  }
 
-  // getListUsers = async () => {
-  //   try {
-  //     const querySnapshot = await this.userCollection.get()
-  //     const listUsers = querySnapshot.docs.map((doc) => doc.data())
-  //     return listUsers
-  //   } catch (err) {
-  //     return []
-  //   }
-  // }
+  getListUsers = async () => {
+    try {
+      // this.userCollection.doc().onSnapshot
+      const querySnapshot = await this.userCollection.get()
+      const listUsers = querySnapshot.docs.map((doc) => doc.data())
+      return listUsers
+    } catch (err) {
+      return []
+    }
+  }
 
-  // // chat
+  searchUserByEmail = async (email) => {
+    const querySnapshot = await this.userCollection
+      .where('email', '==', email)
+      .get()
+    if (querySnapshot.docs.length > 0) {
+      return querySnapshot.docs[0].data()
+    }
+    return null
+  }
+
+  // chat
+
   // getMessageRef(uid1) {
   //   const uid2 = this.currentUser.uid
   //   let refName = `messages_${uid1}_${uid2}`
