@@ -35,6 +35,15 @@ class Fire {
     }
   }
 
+  signOut = async () => {
+    try {
+      await firebase.auth().signOut()
+      return
+    } catch (err) {
+      throw new Error(err.message)
+    }
+  }
+
   observeAuth = (listener = () => {}) =>
     firebase.auth().onAuthStateChanged(listener)
 

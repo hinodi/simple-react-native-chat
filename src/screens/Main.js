@@ -1,5 +1,5 @@
 import React from 'react'
-import { FlatList, StyleSheet } from 'react-native'
+import { FlatList, StyleSheet, SafeAreaView } from 'react-native'
 
 import Firebase from '../firebase'
 import colors from '../config/colors'
@@ -21,12 +21,14 @@ class Main extends React.Component {
 
   render() {
     return (
-      <FlatList
-        data={this.state.listUsers}
-        keyExtractor={this._keyExtractor}
-        renderItem={this._renderItem}
-        style={styles.container}
-      />
+      <SafeAreaView style={styles.container}>
+        <FlatList
+          data={this.state.listUsers}
+          keyExtractor={this._keyExtractor}
+          renderItem={this._renderItem}
+          style={styles.container}
+        />
+      </SafeAreaView>
     )
   }
 
@@ -40,6 +42,7 @@ export default Main
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: `${colors.darkColor}`,
   },
 })

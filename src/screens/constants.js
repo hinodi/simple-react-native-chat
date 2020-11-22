@@ -5,6 +5,11 @@ export const AppRoutes = {
 }
 
 export const MainRoutes = {
-  Main: 'Main',
+  HomeTab: 'HomeTab',
   Chat: 'Chat',
+}
+
+export const HomeRoutes = {
+  Main: 'Main',
+  Setting: 'Setting',
 }
